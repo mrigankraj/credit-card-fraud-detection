@@ -1,0 +1,31 @@
+```python
+{
+ "cells": [
+   {
+     "cell_type": "markdown",
+     "metadata": {},
+     "source": [
+       "# Credit Card Fraud Detection - Exploratory Data Analysis"
+     ]
+   },
+   {
+     "cell_type": "code",
+     "execution_count": null,
+     "metadata": {},
+     "source": [
+       "import pandas as pd",
+       "import matplotlib.pyplot as plt",
+       "import seaborn as sns",
+       "",
+       "# Load the data",
+       "data = pd.read_csv('../data/creditcard.csv')",
+       "",
+       "# Basic data exploration",
+       "print(data.shape)",
+       "print(data.columns)",
+       "print(data['Class'].value_counts(normalize=True))"
+     ]
+   }
+ ]
+}
+```
