@@ -1,4 +1,4 @@
-# Credit Card Fraud Detection
+# Credit Card Fraud Detection 🕵️‍♀️💳
 
 ![image](https://github.com/user-attachments/assets/ebbd2576-d246-400f-b14b-4551e3523a4a)
 
