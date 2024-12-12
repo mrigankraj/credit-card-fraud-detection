@@ -1,0 +1,91 @@
+import numpy as np
+import joblib
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, precision_recall_curve, auc
+import xgboost as xgb
+
+class ModelTrainer:
+    def __init__(self, config):
+        self.config = config
+        self.models = {
+            'random_forest': RandomForestClassifier(n_estimators=100, random_state=42),
+            'logistic_regression': LogisticRegression(class_weight='balanced', max_iter=1000),
+            'xgboost': xgb.XGBClassifier(scale_pos_weight=1, random_state=42)
+        }
+    
+    def train_model(self, X_train, y_train, model_name='random_forest'):
+        """
+        Train a specific model
+        
+        Args:
+            X_train (np.array): Training features
+            y_train (np.array): Training labels
+            model_name (str): Name of the model to train
+        
+        Returns:
+            Trained model
+        """
+        model = self.models.get(model_name)
+        
+        if model is None:
+            raise ValueError(f"Model {model_name} not found")
+        
+        model.fit(X_train, y_train)
+        return model
+    
+    def save_model(self, model, filepath):
+        """
+        Save trained model to disk
+        
+        Args:
+            model: Trained model
+            filepath (str): Path to save model
+        """
+        joblib.dump(model, filepath)
+        print(f"Model saved to {filepath}")
+    
+    def evaluate_model(self, model, X_test, y_test):
+        """
+        Evaluate model performance
+        
+        Args:
+            model: Trained model
+            X_test (np.array): Test features
+            y_test (np.array): Test labels
+        
+        Returns:
+            dict: Performance metrics
+        """
+        y_pred = model.predict(X_test)
+        y_pred_proba = model.predict_proba(X_test)[:, 1]
+        
+        # Precision-Recall Curve
+        precision, recall, _ = precision_recall_curve(y_test, y_pred_proba)
+        auc_prc = auc(recall, precision)
+        
+        return {
+            'classification_report': classification_report(y_test, y_pred),
+            'auc_prc': auc_prc
+        }
+
+def main():
+    # Example usage (typically called from another script)
+    from data_preprocessing import DataPreprocessor
+    
+    preprocessor = DataPreprocessor(config={})
+    data = preprocessor.load_data('data/creditcard.csv')
+    X, y = preprocessor.preprocess_data(data)
+    X_train, X_test, y_train, y_test = preprocessor.split_data(X, y)
+    
+    trainer = ModelTrainer(config={})
+    model = trainer.train_model(X_train, y_train, 'random_forest')
+    
+    results = trainer.evaluate_model(model, X_test, y_test)
+    print("Classification Report:\n", results['classification_report'])
+    print("AUC-PRC:", results['auc_prc'])
+    
+    trainer.save_model(model, 'models/random_forest_model.joblib')
+
+if __name__ == "__main__":
+    main()
