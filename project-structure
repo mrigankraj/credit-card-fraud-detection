@@ -1,0 +1,24 @@
+credit-card-fraud-detection/
+│
+├── data/
+│   └── creditcard.csv  # Raw dataset
+│
+├── notebooks/
+│   └── data_exploration.ipynb  # Jupyter notebook for initial analysis
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_preprocessing.py
+│   ├── model_training.py
+│   ├── model_evaluation.py
+│   └── utils.py
+│
+├── models/
+│   └── .gitkeep  # Placeholder for trained models
+│
+├── config/
+│   └── config.yaml  # Configuration settings
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
